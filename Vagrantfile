@@ -56,4 +56,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "file", source: "ansible-hosts", destination: "/ansible/environments/dev/hosts"
 
+  config.vm.provision "shell", inline: <<-SHELL
+    cd /ansible
+    ansible-galaxy install -r requirements.yml --roles-path roles
+    ansible -m ping all
+  SHELL
+
 end # Vagrant.configure
