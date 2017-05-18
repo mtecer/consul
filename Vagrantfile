@@ -4,8 +4,8 @@ vagrant_ssh_public_key = "vagrant-key.pub"
 
 nodes = {
   'consul1' => { 'ip' => '172.28.128.11' },
-  'consul2' => { 'ip' => '172.28.128.12' },
-  'consul3' => { 'ip' => '172.28.128.13' },
+  # 'consul2' => { 'ip' => '172.28.128.12' },
+  # 'consul3' => { 'ip' => '172.28.128.13' },
 }
 
 File.open('ansible-hosts' ,'w') do |f|
@@ -57,6 +57,3 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "ansible-hosts", destination: "/ansible/environments/dev/hosts"
 
 end # Vagrant.configure
-
-
-
