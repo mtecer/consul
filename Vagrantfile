@@ -2,10 +2,20 @@ ssh_key_path = "~/Projects/keys/"
 vagrant_ssh_private_key = "vagrant-key"
 vagrant_ssh_public_key = "vagrant-key.pub"
 
-nodes = {
-  'consul1' => { 'ip' => '172.28.128.11' },
-  # 'consul2' => { 'ip' => '172.28.128.12' },
-  # 'consul3' => { 'ip' => '172.28.128.13' },
+$nodes = {
+  'consul1' => { 'ip' => '172.28.128.11', },
+  'consul2' => { 'ip' => '172.28.128.12', },
+  # 'consul3' => { 'ip' => '172.28.128.13', },
+}
+
+$groups = {
+  'controller'          => [ 'consul1', 'consul2' ],
+  'compute'             => [ 'consul1', 'consul2' ],
+  'all_groups:children' => [ 'controller', 'compute' ],
+  'group3'              => [ 'consul[1:3]' ],
+  'group4'              => [ 'consul-[a:d]' ],
+  'group3:vars'         => { 'variable1' => 9,
+                             'variable2' => 'example' }
 }
 
 File.open('ansible-hosts' ,'w') do |f|
@@ -24,12 +34,8 @@ Vagrant.configure("2") do |config|
   config.ssh.password = nil
   config.ssh.private_key_path = [ "#{ ssh_key_path + vagrant_ssh_private_key }", "~/.vagrant.d/insecure_private_key" ]
   config.vm.box_check_update = false
-  config.vm.provision "file", source: "#{ ssh_key_path + vagrant_ssh_private_key }", destination: "~/.ssh/#{vagrant_ssh_private_key}"
-  config.vm.provision "file", source: "#{ ssh_key_path + vagrant_ssh_public_key }", destination: "~/.ssh/authorized_keys"
 
-  config.vm.provision "shell", path: "bootstrap-controller.sh"
-
-  nodes.each do |hostname, details|
+  $nodes.each_with_index do |(hostname, details), index|
     config.vm.define "#{hostname}" do |node|
       # node.vm.box = "centos/7"
       node.vm.box = "centos-7-ansible"
@@ -50,18 +56,23 @@ Vagrant.configure("2") do |config|
         v.memory = 1024
         v.name = "#{hostname}"
       end # node.vm.provider
+
       # node.vm.provision "shell", path: "bootstrap-consul#{i}.sh"
+
+      config.vm.provision "file", source: "#{ ssh_key_path + vagrant_ssh_public_key }", destination: "~/.ssh/authorized_keys"
+      
+      if index == $nodes.size - 1
+        config.vm.provision "file", source: "#{ ssh_key_path + vagrant_ssh_private_key }", destination: "~/.ssh/#{vagrant_ssh_private_key}"
+        config.vm.provision "shell", path: "bootstrap-controller.sh"
+        config.vm.provision "file", source: "ansible-hosts", destination: "/ansible/environments/dev/hosts"
+        $run_ansible = <<-SHELL
+          cd /ansible
+          sudo su vagrant -c 'ansible-galaxy install -r /ansible/requirements.yaml --roles-path /ansible/roles'
+          sudo su vagrant -c 'ansible -m ping all'
+        SHELL
+        config.vm.provision "shell", inline: $run_ansible
+      end # if index ==
+
     end # config.vm.define
-  end # nodes.each
-
-  config.vm.provision "file", source: "ansible-hosts", destination: "/ansible/environments/dev/hosts"
-
-  $run_ansible = <<-SHELL
-    cd /ansible
-    sudo su vagrant -c 'ansible-galaxy install -r /ansible/requirements.yml --roles-path /ansible/roles'
-    sudo su vagrant -c 'ansible -m ping all'
-  SHELL
-
-  config.vm.provision "shell", inline: $run_ansible
-
+  end # $nodes.each_with_index
 end # Vagrant.configure
