@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GITREPO="https://github.com/mtecer/consul.git"
+GITREPO="https://github.com/mtecer/${1}.git"
 
 if ! rpm -q --quiet epel-release ansible; then
     echo "Installing ansible"

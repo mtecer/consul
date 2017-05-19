@@ -66,7 +66,7 @@ Vagrant.configure("2") do |config|
       
       if index == $nodes.size - 1
         node.vm.provision "file", source: "#{ ssh_key_path + vagrant_ssh_private_key }", destination: "~/.ssh/#{vagrant_ssh_private_key}"
-        node.vm.provision "shell", path: "bootstrap-controller.sh"
+        node.vm.provision "shell", path: "bootstrap-ansible.sh consul"
         node.vm.provision "file", source: "ansible-hosts", destination: "/ansible/environments/dev/hosts"
         $run_ansible = <<-SHELL
           cd /ansible
