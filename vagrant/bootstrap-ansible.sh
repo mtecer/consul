@@ -11,12 +11,13 @@ else
     echo "Ansible is already installed"
 fi
 
-if [ ! -d /ansible ]; then
+if [ ! -d /home/vagrant/ansible ]; then
     echo "Configuring ansible"
-    git clone ${GITREPO} /ansible
+    git clone ${GITREPO} /home/vagrant/ansible
 else
-    echo "Updating git repo in /ansible"
-    cd /ansible && git pull
+    echo "Updating git repo in /home/vagrant/ansible"
+    cd /home/vagrant/ansible && git pull
 fi
 
-sudo chown -R vagrant.vagrant /ansible
+ln -s /home/vagrant/ansible/ansible /ansible
+chown -R vagrant.vagrant /home/vagrant/ansible

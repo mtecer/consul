@@ -36,3 +36,7 @@ provisioning:
 
 kill:
 	vagrant destroy -f
+
+rebuild:
+	vagrant destroy -f
+	vagrant up

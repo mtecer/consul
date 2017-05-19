@@ -7,8 +7,8 @@ vagrant_ssh_public_key = "vagrant-key.pub"
 
 $nodes = {
   'consul1' => { 'ip' => '172.28.128.11', 'groups' => [ 'consul' ] },
-  'consul2' => { 'ip' => '172.28.128.12', 'groups' => [ 'consul' ] },
-  'consul3' => { 'ip' => '172.28.128.13', 'groups' => [ 'consul' ] },
+  # 'consul2' => { 'ip' => '172.28.128.12', 'groups' => [ 'consul' ] },
+  # 'consul3' => { 'ip' => '172.28.128.13', 'groups' => [ 'consul' ] },
 }
 
 $groups = {}
@@ -70,7 +70,7 @@ Vagrant.configure("2") do |config|
       if index == $nodes.size - 1
         node.vm.provision "file", source: "#{ ssh_key_path + vagrant_ssh_private_key }", destination: "~/.ssh/#{vagrant_ssh_private_key}"
         node.vm.provision "shell", path: "bootstrap-ansible.sh", args: "consul"
-        node.vm.provision "file", source: ansible_hosts, destination: "/ansible/environments/dev/hosts"
+        node.vm.provision "file", source: ansible_hosts, destination: "~/ansible/ansible/environments/dev/hosts"
         $run_ansible = <<-SHELL
           cd /ansible
           sudo su vagrant -c 'ansible-galaxy install -r /ansible/requirements.yaml --roles-path /ansible/roles'
