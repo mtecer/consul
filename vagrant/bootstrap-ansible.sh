@@ -6,7 +6,7 @@ if ! rpm -q --quiet epel-release ansible; then
     echo "Installing ansible"
     rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
     yum -y install epel-release
-    yum -y install ansible git net-tools
+    yum -y install ansible git net-tools wget unzip
 else
     echo "Ansible is already installed"
 fi
