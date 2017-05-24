@@ -6,12 +6,12 @@ vagrant_ssh_private_key = "vagrant-key"
 vagrant_ssh_public_key = "vagrant-key.pub"
 
 $nodes = {
-  'consul1' => { 'ip' => '172.28.128.11', 'groups' => [ 'consul' ] },
-  'consul2' => { 'ip' => '172.28.128.12', 'groups' => [ 'consul' ] },
-  'consul3' => { 'ip' => '172.28.128.13', 'groups' => [ 'consul' ] },
-  'consul4' => { 'ip' => '172.28.128.14', 'groups' => [ 'consul' ] },
-  'consul5' => { 'ip' => '172.28.128.15', 'groups' => [ 'consul' ] },
-  'consul6' => { 'ip' => '172.28.128.16', 'groups' => [ 'consul' ] },
+  'consul1' => { 'ip' => '172.28.128.11', 'groups' => [ 'consul', 'consul-bootstrap-server' ] },
+  'consul2' => { 'ip' => '172.28.128.12', 'groups' => [ 'consul', 'consul-server',  ] },
+  'consul3' => { 'ip' => '172.28.128.13', 'groups' => [ 'consul', 'consul-server' ] },
+  # 'consul4' => { 'ip' => '172.28.128.14', 'groups' => [ 'consul-agent' ] },
+  # 'consul5' => { 'ip' => '172.28.128.15', 'groups' => [ 'consul-agent' ] },
+  # 'consul6' => { 'ip' => '172.28.128.16', 'groups' => [ 'consul-agent' ] },
 }
 
 $groups = {}
@@ -57,8 +57,8 @@ Vagrant.configure("2") do |config|
         v.name = "#{hostname}"
       end # node.vm.provider
 
-      # node.vm.box = "centos/7"
-      node.vm.box = "centos-7-ansible"
+      node.vm.box = "centos/7"
+      # node.vm.box = "centos-7-ansible"
       node.vm.hostname = "#{hostname}"
       node.vm.network "forwarded_port", guest: 8080, host: "8080", auto_correct: true
       node.vm.network "private_network", ip: "#{details['ip']}"
