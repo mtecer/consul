@@ -7,8 +7,8 @@ vagrant_ssh_public_key = "vagrant-key.pub"
 
 $nodes = {
   'consul1' => { 'ip' => '172.28.128.11', 'groups' => [ 'consul', 'consul-bootstrap-server' ] },
-  'consul2' => { 'ip' => '172.28.128.12', 'groups' => [ 'consul', 'consul-server',  ] },
-  'consul3' => { 'ip' => '172.28.128.13', 'groups' => [ 'consul', 'consul-server' ] },
+  # 'consul2' => { 'ip' => '172.28.128.12', 'groups' => [ 'consul', 'consul-server',  ] },
+  # 'consul3' => { 'ip' => '172.28.128.13', 'groups' => [ 'consul', 'consul-server' ] },
   # 'consul4' => { 'ip' => '172.28.128.14', 'groups' => [ 'consul-agent' ] },
   # 'consul5' => { 'ip' => '172.28.128.15', 'groups' => [ 'consul-agent' ] },
   # 'consul6' => { 'ip' => '172.28.128.16', 'groups' => [ 'consul-agent' ] },
@@ -77,8 +77,12 @@ Vagrant.configure("2") do |config|
         $run_ansible = <<-SHELL
           cd /ansible
           sudo su vagrant -c 'ansible-galaxy install -r /ansible/requirements.yaml --roles-path /ansible/roles'
+          sudo mkdir /root/.ssh
+          sudo cp -a /home/vagrant/.ssh/authorized_keys /root/.ssh/authorized_keys
+          sudo chown root.root /root/.ssh/authorized_keys
+          whoami
           # sudo su vagrant -c 'ansible -m ping all'
-          sudo su vagrant -c 'ansible-playbook playbook.yaml'
+          # sudo su vagrant -c 'ansible-playbook playbook.yaml'
         SHELL
         node.vm.provision "shell", inline: $run_ansible
       end # if index ==
