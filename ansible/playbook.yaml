@@ -1,5 +1,7 @@
 ---
 - hosts: consul
+  become: true
+  become_user: root
   roles:
     - { role: common, tags: ["common"] }
     - { role: consul, tags: ["consul"] }
