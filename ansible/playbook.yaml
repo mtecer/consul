@@ -1,4 +1,5 @@
 ---
 - hosts: consul
   roles:
-  - { role: consul, tags: ["consul"] }
+    - { role: common, tags: ["common"] }
+    - { role: consul, tags: ["consul"] }
