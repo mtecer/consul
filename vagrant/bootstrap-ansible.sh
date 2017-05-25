@@ -19,5 +19,7 @@ else
     cd /home/vagrant/ansible && git pull
 fi
 
-ln -s /home/vagrant/ansible/ansible /ansible
-chown -R vagrant.vagrant /home/vagrant/ansible
+if [ ! -d /ansible ]; then
+    ln -s /home/vagrant/ansible/ansible /ansible
+    chown -R vagrant.vagrant /home/vagrant/ansible
+fi
