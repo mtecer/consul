@@ -2,6 +2,10 @@ data "openstack_images_image_v2" "consul_image" {
   name = "${var.consul_image}"
   most_recent = true
 }
+data "openstack_images_image_v2" "consul_admin_image" {
+  name = "${var.consul_admin_image}"
+  most_recent = true
+}
 data "template_file" "bootstap_ansible_sh" {
   template = "${file("${path.module}/templates/bootstrap-ansible.sh.tpl")}"
   vars {

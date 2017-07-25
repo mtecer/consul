@@ -27,3 +27,11 @@ variable "consul_keypair" {}
 variable "consul_network" {}
 variable "consul_volume_size" {}
 variable "consul_securitygroups" {}
+
+variable "consul_admin_count" {}
+variable "consul_admin_image" {}
+variable "consul_admin_flavor" {}
+variable "consul_admin_keypair" {}
+variable "consul_admin_network" {}
+variable "consul_admin_volume_size" {}
+variable "consul_admin_securitygroups" {}
