@@ -84,16 +84,3 @@
         name: consul
         daemon_reload: yes
         state: restarted
-
-
-- hosts: consul_admin
-  vars_files:
-    - external_variables.yaml
-  tasks:
-    - name: Create Kubernetes repo
-      template:
-        src:    templates/kubernetes_repo.j2
-        dest:   /etc/yum.repos.d/kubernetes.repo
-        owner:  root
-        group:  root
-        mode:   0644

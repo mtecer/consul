@@ -63,7 +63,7 @@ resource "openstack_compute_instance_v2" "consul" {
 
 resource "openstack_compute_instance_v2" "consul_client" {
   count                   = "${var.consul_client_count}"
-  name                    = "consul_client0${count.index+1}"
+  name                    = "client0${count.index+1}"
   flavor_name             = "${var.consul_client_flavor}"
   key_pair                = "${var.consul_client_keypair}"
   security_groups         = [ "${var.consul_client_securitygroups}" ]

@@ -4,4 +4,6 @@
 .vagrant/
 ansible_hosts
 *tfstate*
+ansible.old
+*/bmc/terraform.tfvars
 
