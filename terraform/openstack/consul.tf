@@ -27,6 +27,7 @@ data "template_file" "ansible_external_variables_yaml" {
     openstack_vm_no_proxy     = "${var.openstack_vm_no_proxy}"
     openstack_vm_proxy        = "${var.openstack_vm_proxy}"
     consul_version            = "${var.consul_version}"
+    consul_template_version   = "${var.consul_template_version}"
   }
 }
 
