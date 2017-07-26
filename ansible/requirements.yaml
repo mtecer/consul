@@ -1,7 +1,7 @@
-- name: common
-  src: https://github.com/mtecer/ansible-common.git
-  version: master
-
-- name: consul
-  src: https://github.com/mtecer/ansible-consul.git
-  version: master
+# Ansible requirements file for roles
+# - name: common
+#   src: https://github.com/mtecer/ansible-common.git
+#   version: master
+# - name: consul
+#   src: https://github.com/mtecer/ansible-consul.git
+#   version: master

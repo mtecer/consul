@@ -1,7 +1,104 @@
 ---
+- hosts: all
+  vars_files:
+    - external_variables.yaml
+  tasks:
+    - name: Update hostname
+      hostname:
+        name: "{{ ansible_hostname }}"
+    - name: Update /etc/hosts file
+      template:
+        src:    templates/etc_hosts.j2
+        dest:   /etc/hosts
+        owner:  root
+        group:  root
+        mode:   0644
+    - name: Ensure proxies are set for Consul
+      template:
+        src:    templates/etc_profile_d_proxy_sh.j2
+        dest:   /etc/profile.d/proxy.sh
+        owner:  root
+        group:  root
+        mode:   0644
+
+
 - hosts: consul
-  become: true
-  become_user: root
-  roles:
-    - { role: common, tags: ["common"] }
-    - { role: consul, tags: ["consul"] }
+  vars_files:
+    - external_variables.yaml
+  tasks:
+    - name: Download latest Consul binary
+      unarchive:
+        src: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip
+        dest: /usr/bin
+        remote_src: True
+        owner: root
+        group: root
+        creates: /usr/bin/consul
+    - name: Create Consul group
+      group:
+        name: consul
+    - name: Create Consul user
+      user:
+        group: consul
+        home: /var/lib/consul
+        name: consul
+        shell: /sbin/nologin
+    - name: Create Consul directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: consul
+        group: consul
+      with_items:
+        - /etc/consul.d
+        - /usr/share/consul-ui
+        - /var/lib/consul
+    - name: Download latest Consul Web UI
+      unarchive:
+        src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_web_ui.zip"
+        dest: /usr/share/consul-ui
+        remote_src: True
+        owner: root
+        group: consul
+        creates: /usr/share/consul-ui/index.html
+      when: consul_server|bool == true
+    - name: Create Consul systemd configuration
+      template:
+        src: consul.service.j2
+        dest: /usr/lib/systemd/system/consul.service
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart Consul service
+    - name: Create Consul service configuration
+      template:
+        src: consul.json.j2
+        dest: /etc/consul.d/consul.json
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart Consul service
+    - name: Enable Consul service
+      service:
+        name: consul
+        state: started
+        enabled: yes
+  handlers:
+    - name: Restart Consul service
+      service:
+        name: consul
+        daemon_reload: yes
+        state: restarted
+
+
+- hosts: consul_admin
+  vars_files:
+    - external_variables.yaml
+  tasks:
+    - name: Create Kubernetes repo
+      template:
+        src:    templates/kubernetes_repo.j2
+        dest:   /etc/yum.repos.d/kubernetes.repo
+        owner:  root
+        group:  root
+        mode:   0644
