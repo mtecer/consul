@@ -20,7 +20,12 @@
         owner:  root
         group:  root
         mode:   0644
-
+    - name: Install required packages
+      package:
+        name:   "{{ item }}"
+        state:  present
+      with_items:
+        - "unzip"
 
 - hosts: consul
   vars_files:
