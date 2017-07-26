@@ -16,7 +16,7 @@
     "recursors": [ "10.199.51.5", "8.8.8.8" ],
     "rejoin_after_leave": true,
     "retry_interval": "30s",
-    "retry_join": [{% for host in groups['consul'] %} "{{ hostvars[ansible_hostname].ansible_default_ipv4.address }}"{%- if not loop.last %},{% endif %}{% endfor %} ],
+    "retry_join": [{% for host in groups['consul'] %} "{{ hostvars[host].ansible_default_ipv4.address }}"{%- if not loop.last %},{% endif %}{% endfor %} ],
     "server": true,
     "skip_leave_on_interrupt": true,
     "ui": true,
