@@ -106,14 +106,14 @@ resource "null_resource" "ansible" {
     content     = "${data.template_file.ansible_external_variables_yaml.rendered}"
     destination = "/ansible/external_variables.yaml"
   }
-  # provisioner "remote-exec" "run_ansible" {
-  #   inline = [
-  #     "cd /ansible && git pull",
-  #     "while true; do if [ -x /usr/bin/ansible-playbook ]; then break; fi done",
-  #     "sleep 10",
-  #     "ansible-playbook playbook.yaml",
-  #   ]
-  # }
+  provisioner "remote-exec" "run_ansible" {
+    inline = [
+      "cd /ansible && git pull",
+      "while true; do if [ -x /usr/bin/ansible-playbook ]; then break; fi done",
+      "sleep 10",
+      "ansible-playbook playbook.yaml",
+    ]
+  }
 }
 
 output "Consul Servers" {
