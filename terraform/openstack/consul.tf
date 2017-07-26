@@ -96,6 +96,8 @@ resource "null_resource" "ansible" {
     inline = [
       "echo [consul] > /ansible/environments/dev/hosts",
       "echo \"${join("\n",formatlist("%s ansible_ssh_host=%s", openstack_compute_instance_v2.consul.*.name, openstack_compute_instance_v2.consul.*.access_ip_v4))}\" >> /ansible/environments/dev/hosts",
+      "echo [consul_bootstrap] > /ansible/environments/dev/hosts",
+      "echo \"${join("\n",formatlist("%s ansible_ssh_host=%s", openstack_compute_instance_v2.consul.0.name, openstack_compute_instance_v2.consul.0.access_ip_v4))}\" >> /ansible/environments/dev/hosts",
       "echo '\n[consul_admin]' >> /ansible/environments/dev/hosts",
       "echo \"${join("\n",formatlist("%s ansible_ssh_host=%s", openstack_compute_instance_v2.consul_admin.*.name, openstack_compute_instance_v2.consul_admin.*.access_ip_v4))}\" >> /ansible/environments/dev/hosts",
       ]
