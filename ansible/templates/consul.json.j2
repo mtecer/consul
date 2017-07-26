@@ -3,7 +3,7 @@
     "bootstrap": {% if ansible_hostname in groups['consul_bootstrap'] %}true{% else %}false{% endif %},
     "client_addr": {% if ansible_hostname in groups['consul_client'] %}"127.0.0.1"{% else %}"0.0.0.0"{% endif %},
     "data_dir": "/var/lib/consul",
-    "datacenter": "BO1",
+    "datacenter": "SC9B",
     "disable_remote_exec": true,
     "disable_update_check": true,
     "enable_debug": false,
@@ -20,4 +20,5 @@
     "server": {% if ansible_hostname in groups['consul_server'] %}true{% else %}false{% endif %},
     "skip_leave_on_interrupt": true,
     "ui": {% if ansible_hostname in groups['consul_server'] %}true{% else %}false{% endif %}
+    
 }

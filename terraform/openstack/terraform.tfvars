@@ -7,6 +7,7 @@ ansible_user              = "root"
 ansible_home              = "/root"
 
 consul_version            = "0.9.0"
+consul_template_version   = "0.19.0"
 consul_ansible_repo       = "https://github.com/mtecer/consul.git"
 
 consul_count              = "3"

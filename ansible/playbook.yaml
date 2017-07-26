@@ -84,3 +84,31 @@
         name: consul
         daemon_reload: yes
         state: restarted
+
+- hosts: consul_client
+  vars_files:
+    - external_variables.yaml
+  tasks:
+    - name: Download latest Consul Template binary
+      unarchive:
+        src: https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/consul-template_{{ consul_template_version }}_linux_amd64.zip
+        dest: /usr/bin
+        remote_src: True
+        owner: root
+        group: root
+        creates: /usr/bin/consul
+    - name: Create Consul Template directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+      with_items:
+        - /etc/consul-template.d
+    - name: Create Consul Template systemd configuration
+      template:
+        src: consul-template.service.j2
+        dest: /usr/lib/systemd/system/consul-template.service
+        owner: root
+        group: root
+        mode: 0644

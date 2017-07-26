@@ -9,6 +9,7 @@ variable "ansible_user" {}
 variable "ansible_home" {}
 
 variable "consul_version" {}
+variable "consul_template_version" {}
 variable "consul_ansible_repo" {}
 
 variable "auth_url" {}
