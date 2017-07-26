@@ -19,5 +19,5 @@
     "retry_join": [{% for host in groups['consul'] %} "{{ hostvars[host].ansible_default_ipv4.address }}"{%- if not loop.last %},{% endif %}{% endfor %} ],
     "server": true,
     "skip_leave_on_interrupt": true,
-    "ui": {% if ansible_hostname in groups['consul_bootstrap'] %}true{% else %}false{% endif %}
+    "ui": true
 }
