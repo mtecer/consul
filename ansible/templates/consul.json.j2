@@ -1,7 +1,7 @@
 {
     "bind_addr": "{{ hostvars[ansible_hostname].ansible_default_ipv4.address }}",
     "bootstrap": {% if ansible_hostname in groups['consul_bootstrap'] %}true{% else %}false{% endif %},
-    "client_addr": "0.0.0.0",
+    "client_addr": {% if ansible_hostname in groups['consul_clients'] %}"127.0.0.1"{% else %}"0.0.0.0"{% endif %},
     "data_dir": "/var/lib/consul",
     "datacenter": "BO1",
     "disable_remote_exec": true,
@@ -16,8 +16,8 @@
     "recursors": [ "10.199.51.5", "8.8.8.8" ],
     "rejoin_after_leave": true,
     "retry_interval": "30s",
-    "retry_join": [{% for host in groups['consul'] %} "{{ hostvars[host].ansible_default_ipv4.address }}"{%- if not loop.last %},{% endif %}{% endfor %} ],
-    "server": true,
+    "retry_join": [{% for host in groups['consul_server'] %} "{{ hostvars[host].ansible_default_ipv4.address }}"{%- if not loop.last %},{% endif %}{% endfor %} ],
+    "server": {% if ansible_hostname in groups['consul_server'] %}true{% else %}false{% endif %},
     "skip_leave_on_interrupt": true,
-    "ui": true
+    "ui": {% if ansible_hostname in groups['consul_server'] %}true{% else %}false{% endif %}
 }

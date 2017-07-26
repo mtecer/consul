@@ -28,6 +28,14 @@ variable "consul_network" {}
 variable "consul_volume_size" {}
 variable "consul_securitygroups" {}
 
+variable "consul_client_count" {}
+variable "consul_client_image" {}
+variable "consul_client_flavor" {}
+variable "consul_client_keypair" {}
+variable "consul_client_network" {}
+variable "consul_client_volume_size" {}
+variable "consul_client_securitygroups" {}
+
 variable "consul_admin_count" {}
 variable "consul_admin_image" {}
 variable "consul_admin_flavor" {}

@@ -1,6 +1,0 @@
-export http_proxy="{{ openstack_vm_proxy }}"
-export ftp_proxy="{{ openstack_vm_proxy }}"
-export https_proxy="{{ openstack_vm_proxy }}"
-export no_proxy="127.0.0.1,localhost,169.254.169.254,{% for host in groups.consul %}
-{{ hostvars[host].ansible_default_ipv4.address }},{%- endfor %}
-{{ openstack_vm_api_ip }}"
